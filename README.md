@@ -178,6 +178,16 @@ client.scan([], function(entry){
 
 Any errors returned from the Redis client will be passed straight to the `onEnd` function and the process will be stopped. This is to avoid the case where multiple requests are timing out against the server and causing the process to hang unnecessarily.
 
+Passing an error to the `done` callback in `onData` will also halt progress, and forward your `err` to the `onEnd` function.
+
+```javascript
+client.scan([], function(entry, done){
+    done(new Error('Failed!');
+}, function(err){
+    console.log(err.message); // 'Failed!'
+});
+```
+
 ### Tests
 
 Naturally, to run the tests you need Redis running. Tests operate on the default database and *will* wipe existing data, so be careful. Tests are controlled by Grunt.

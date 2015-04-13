@@ -94,6 +94,18 @@ describe('SSCAN', function(){
 
         });
 
+        it('exits on an error', function(next){
+
+            client.sscan('test_set', function(result, done){
+                done(new Error('Fake Error!'));
+            }, function(err){
+                should(err).be.ok;
+                should(err.message).eql('Fake Error!');
+                next();
+            });
+
+        });
+
         it('can use upper case method names', function(next){
 
             var count = 0;
@@ -142,11 +154,11 @@ describe('SSCAN', function(){
                 onData: function(){
                     count++;
                 },
-                onEnd: function(){
+                onEnd: function(err){
+                    should(err).not.be.ok;
                     should(count).eql(50);
                     next();
-                },
-                onError: next
+                }
             });
 
         });
@@ -163,7 +175,8 @@ describe('SSCAN', function(){
                         done();
                     }, 10);
                 },
-                onEnd: function(){
+                onEnd: function(err){
+                    should(err).not.be.ok;
                     should(count).eql(50);
 
                     var counter = 0;
@@ -172,8 +185,7 @@ describe('SSCAN', function(){
                     });
 
                     next();
-                },
-                onError: next
+                }
             });
 
         });
@@ -188,11 +200,11 @@ describe('SSCAN', function(){
                     should(result).match(/key:1*/);
                     count++;
                 },
-                onEnd: function(){
+                onEnd: function(err){
+                    should(err).not.be.ok;
                     should(count).eql(11);
                     next();
-                },
-                onError: next
+                }
             });
 
         });
@@ -207,11 +219,26 @@ describe('SSCAN', function(){
                         this.end();
                     }
                 },
-                onEnd: function(){
+                onEnd: function(err){
+                    should(err).not.be.ok;
                     should(count).eql(6);
                     next();
+                }
+            });
+
+        });
+
+        it('exits on an error', function(next){
+
+            client.sscan('test_set', {
+                onData: function(result, done){
+                    done(new Error('Fake Error!'));
                 },
-                onError: next
+                onEnd: function(err){
+                    should(err).be.ok;
+                    should(err.message).eql('Fake Error!');
+                    next();
+                }
             });
 
         });
@@ -226,11 +253,11 @@ describe('SSCAN', function(){
                         this.end();
                     }
                 },
-                onEnd: function(){
+                onEnd: function(err){
+                    should(err).not.be.ok;
                     should(count).eql(6);
                     next();
-                },
-                onError: next
+                }
             });
 
         });

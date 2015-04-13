@@ -95,6 +95,18 @@ describe('ZSCAN', function(){
 
         });
 
+        it('exits on an error', function(next){
+
+            client.zscan('test_zset', function(result, done){
+                done(new Error('Fake Error!'));
+            }, function(err){
+                should(err).be.ok;
+                should(err.message).eql('Fake Error!');
+                next();
+            });
+
+        });
+
         it('can use upper case method names', function(next){
 
             var count = 0;
@@ -212,6 +224,21 @@ describe('ZSCAN', function(){
                 onEnd: function(err){
                     should(err).not.exist;
                     should(count).eql(6);
+                    next();
+                }
+            });
+
+        });
+
+        it('exits on an error', function(next){
+
+            client.zscan('test_zset', {
+                onData: function(key, done){
+                    done(new Error('Fake Error!'));
+                },
+                onEnd: function(err){
+                    should(err).be.ok;
+                    should(err.message).eql('Fake Error!');
                     next();
                 }
             });

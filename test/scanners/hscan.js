@@ -94,6 +94,18 @@ describe('HSCAN', function(){
 
         });
 
+        it('exits on an error', function(next){
+
+            client.hscan('test_hash', function(result, done){
+                done(new Error('Fake Error!'));
+            }, function(err){
+                should(err).be.ok;
+                should(err.message).eql('Fake Error!');
+                next();
+            });
+
+        });
+
         it('can use upper case method names', function(next){
 
             var count = 0;
@@ -212,6 +224,21 @@ describe('HSCAN', function(){
                     next();
                 },
                 onError: next
+            });
+
+        });
+
+        it('exits on an error', function(next){
+
+            client.hscan('test_hash', {
+                onData: function(key, done){
+                    done(new Error('Fake Error!'));
+                },
+                onEnd: function(err){
+                    should(err).be.ok;
+                    should(err.message).eql('Fake Error!');
+                    next();
+                }
             });
 
         });
