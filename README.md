@@ -9,7 +9,7 @@ Redis Scanner [![Build Status](https://travis-ci.org/iwhitfield/redis-scanner.sv
 	- [Standard API](#standard-api)
 	- [Object API](#object-api)
 - [Notes](#notes)
-	- [Early Exists](#early-exits)
+	- [Early Exits](#early-exits)
 	- [Error](#errors)
 - [Issues](#issues)
 
